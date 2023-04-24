@@ -91,40 +91,82 @@ def gr_generate_images(prompt: str, num_images: int, num_inference: int):
     return images
 
 with gr.Blocks() as demo:
+    examples = [
+    [
+        'A black and white cute character on top of a hill',
+        1,
+	30
+    ],
+    [
+        'Bubbles and mountains in the sky',
+        1,
+	20
+    ],
+    [
+        'A tree with multiple eyes and a small flower muted colors',
+        1,
+	20
+    ],
+    [
+        "3d character on top of a hill",
+        1,
+	20
+    ],
+    [
+        "a poster of a large forest with black and white characters",
+        1,
+	20
+    ],
+    ]
+
+    gr.Markdown(
+    """
+    <img src="https://github.com/harpomaxx/DeepLili/raw/main/images/lilifiallo/660.png" width="150" height="150">
+
+    # #DeepLili v0.45b
+
+    ## Enter your prompt and generate a work of art in the style of Lili's Toy Art paintings.
+    """
+    )
+
     with gr.Column(variant="panel"):
         with gr.Row(variant="compact"):
             text = gr.Textbox(
                 label="Enter your prompt",
                 show_label=False,
-                max_lines=1,
+                max_lines=2,
                 placeholder="a white and black drawing of  a cute character on top of a house with a little animal"
             ).style(
                 container=False,
             )
-            btn = gr.Button("Generate image").style(full_width=False)
           
         with gr.Row(variant="compact"):
             num_images_slider = gr.Slider(
                 minimum=1,
                 maximum=10,
                 step=1,
-                default=1,
+                value=1,
                 label="Number of Images",
             )
    
             num_inference_steps_slider = gr.Slider(
                 minimum=1,
-                maximum=150,
+                maximum=25,
                 step=1,
-                default=80,
+                value=20,
                 label="Number of Inference Steps",
             )
+
+            btn = gr.Button("Generate image").style(full_width=False)
       
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(columns=[5], rows=[1], object_fit="contain", height="200px", width="200px")
+        ).style(columns=[5], rows=[1], object_fit="contain", height="250px", width="250px")
 
     btn.click(gr_generate_images, [text, num_images_slider,num_inference_steps_slider], gallery)
+    #gr.Examples(examples=examples,inputs= [text, num_images_slider,num_inference_steps_slider])
+    gr.Examples(examples, inputs=[text])
+    #ex.dataset.headers = [""]
 
 if __name__ == "__main__":
     #demo.launch(share=True)
