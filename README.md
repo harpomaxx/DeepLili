@@ -2,7 +2,7 @@
  
 Reproducing the style of [Lili Fiallo](https://www.instagram.com/fiallolili/) art-toy paintings using AI-based approaches.
 
-<img src="https://github.com/harpomaxx/DeepLili/raw/main/images/demo.gif" height="512">
+<img src="https://github.com/harpomaxx/DeepLili/raw/main/images/demo.gif" height="412">
 
 
 
