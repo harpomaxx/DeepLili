@@ -1,17 +1,24 @@
-# DeepLili
-
-<img src="https://github.com/harpomaxx/DeepLili/raw/main/images/lilifiallo/660.png" width="150" height="150">
-
-
-
+# #DeepLili 
+ 
 Reproducing the style of [Lili Fiallo](https://www.instagram.com/fiallolili/) art-toy paintings using AI-based approaches.
 
+<img src="https://github.com/harpomaxx/DeepLili/raw/main/images/demo.gif" height="512">
+
+
+
+## Tools
 * Stable Diffusion
 * Dreambooth
 * Hugging Face diffusers library
+* Gradio library
 
 
-Other useful references:
+## Demo
+
+A demo made with the increible Gradio Library is available 
+
+
+## Other useful references:
 
 [[1](https://huggingface.co/docs/diffusers/using-diffusers/write_own_pipeline)] Understanding pipelines, models and schedulers
 
