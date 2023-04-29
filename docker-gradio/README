@@ -1,0 +1,16 @@
+# Docker image for running the gradio app
+
+Build as usual
+
+```
+docker build -t  harpomaxx/deeplili .
+```
+
+To avoid downloading the model every time you run the docker, change the cache dir
+
+```
+dockerun --gpus all -it -v /home/harpo:/mnt -p 7860:7860 \
+--env HUGGINGFACE_HUB_CACHE="/mnt/hf_cache"\ 
+--name "deeplili" harpomaxx/deeplili
+
+```
