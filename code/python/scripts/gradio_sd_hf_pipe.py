@@ -10,11 +10,8 @@ from tqdm.auto import tqdm
 import random
 import gradio as gr
 
-guidance_scale = 8.5  # Scale for classifier-free guidance
-
-
-pipe = StableDiffusionPipeline.from_pretrained(PATH,local_files_only=False ).to("cpu")
-guidance_scale = 8.5
+pipe = StableDiffusionPipeline.from_pretrained(PATH,local_files_only=False ).to("cuda")
+#guidance_scale = 8.5
 
 def generate_images(prompt, guidance_scale, n_samples, num_inference_steps):
     seeds = [random.randint(1, 10000) for _ in range(n_samples)]
@@ -25,7 +22,7 @@ def generate_images(prompt, guidance_scale, n_samples, num_inference_steps):
         images.append(image)
     return images
 
-def gr_generate_images(prompt: str, num_images: int, num_inference: int):
+def gr_generate_images(prompt: str, num_images: int, num_inference: int, guidance_scale: float ):
     prompt = prompt + "sks style"
     images = generate_images(prompt, guidance_scale, num_images, num_inference)
     return images
@@ -62,9 +59,10 @@ with gr.Blocks() as demo:
     """
     <img src="https://github.com/harpomaxx/DeepLili/raw/main/images/lilifiallo/660.png" width="150" height="150">
 
-    # #DeepLili v0.45b
+    # #DeepLili v0.5b
 
     ## Enter your prompt and generate a work of art in the style of Lili's Toy Art paintings.
+    ## (English, Spanish)
     """
     )
 
@@ -93,8 +91,18 @@ with gr.Blocks() as demo:
                 maximum=25,
                 step=1,
                 value=20,
-                label="Number of Inference Steps",
+                label="Inference Steps",
             )
+
+            guidance_slider = gr.Slider(
+                minimum=1,
+                maximum=14,
+                step=1,
+                value=8,
+                label="Guidance Scale",
+            )
+
+
 
             btn = gr.Button("Generate image").style(full_width=False)
       
@@ -102,7 +110,7 @@ with gr.Blocks() as demo:
             label="Generated images", show_label=False, elem_id="gallery"
         ).style(columns=[5], rows=[1], object_fit="contain", height="250px", width="250px")
 
-    btn.click(gr_generate_images, [text, num_images_slider,num_inference_steps_slider], gallery)
+    btn.click(gr_generate_images, [text, num_images_slider,num_inference_steps_slider,guidance_slider], gallery)
     gr.Examples(examples, inputs=[text])
     gr.HTML(
     """
