@@ -1,16 +1,15 @@
-PATH = 'harpomaxx/deeplili' #stable diffusion 1.5
+PATH = '/home/harpo/stable-diffusion-webui/models/Stable-diffusion/deeplili.safetensors'
+#PATH = '/home/harpo/stable-diffusion-webui/models/Stable-diffusion/v1-5-pruned-emaonly.safetensors'
+#PATH = 'harpomaxx/deeplili' #stable diffusion 1.5
 from PIL import Image
 import torch
-from transformers import CLIPTextModel, CLIPTokenizer
-from diffusers import AutoencoderKL, UNet2DConditionModel, PNDMScheduler
-from diffusers import UniPCMultistepScheduler
-from diffusers import StableDiffusionPipeline
-from PIL import Image
+from diffusers import StableDiffusionPipeline, LMSDiscreteScheduler
 from tqdm.auto import tqdm
 import random
 import gradio as gr
 
-pipe = StableDiffusionPipeline.from_pretrained(PATH,local_files_only=False ).to("cuda")
+pipe = StableDiffusionPipeline.from_single_file(PATH,torch_dtype=torch.float16).to("cuda")
+#pipe = StableDiffusionPipeline.from_single_file(PATH,local_files_only=False, use_safetensors= True ).to("cuda")
 #guidance_scale = 8.5
 
 def generate_images(prompt, guidance_scale, n_samples, num_inference_steps):
@@ -120,4 +119,5 @@ with gr.Blocks() as demo:
 
 if __name__ == "__main__":
     #demo.launch(share=True)
-    demo.queue().launch(share=True)
+    demo.queue(concurrency_count=2,
+            ).launch(share=True)
