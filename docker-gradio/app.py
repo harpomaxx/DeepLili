@@ -1,14 +1,18 @@
-PATH = '/home/harpo/stable-diffusion-webui/models/Stable-diffusion/deeplili.safetensors'
 #PATH = '/home/harpo/stable-diffusion-webui/models/Stable-diffusion/v1-5-pruned-emaonly.safetensors'
 #PATH = 'harpomaxx/deeplili' #stable diffusion 1.5
+PATH = '/home/harpo/stable-diffusion-webui/models/Stable-diffusion/deeplili.safetensors'
 from PIL import Image
 import torch
+import torch.distributed as dist
+import torch.multiprocessing as mp
+import argparse
+
 from diffusers import StableDiffusionPipeline, LMSDiscreteScheduler
 from tqdm.auto import tqdm
 import random
 import gradio as gr
 
-pipe = StableDiffusionPipeline.from_single_file(PATH,torch_dtype=torch.float16).to("cuda")
+#pipe = StableDiffusionPipeline.from_single_file(PATH,torch_dtype=torch.float16).to("cuda:0")
 #pipe = StableDiffusionPipeline.from_single_file(PATH,local_files_only=False, use_safetensors= True ).to("cuda")
 #guidance_scale = 8.5
 
@@ -21,7 +25,7 @@ def generate_images(prompt, guidance_scale, n_samples, num_inference_steps):
         images.append(image)
     return images
 
-def gr_generate_images(prompt: str, num_images: int, num_inference: int, guidance_scale: float ):
+def gr_generate_images(prompt: str, num_images = 1, num_inference = 20, guidance_scale = 8 ):
     prompt = prompt + "sks style"
     images = generate_images(prompt, guidance_scale, num_images, num_inference)
     return images
@@ -77,29 +81,29 @@ with gr.Blocks() as demo:
             )
           
         with gr.Row(variant="compact"):
-            num_images_slider = gr.Slider(
-                minimum=1,
-                maximum=10,
-                step=1,
-                value=1,
-                label="Number of Images",
-            )
+          #  num_images_slider = gr.Slider(
+          #      minimum=1,
+          #      maximum=10,
+          #      step=1,
+          #      value=1,
+          #      label="Number of Images",
+          #  )
    
-            num_inference_steps_slider = gr.Slider(
-                minimum=1,
-                maximum=25,
-                step=1,
-                value=20,
-                label="Inference Steps",
-            )
+          #  num_inference_steps_slider = gr.Slider(
+          #      minimum=1,
+          #      maximum=25,
+          #      step=1,
+          #      value=20,
+          #      label="Inference Steps",
+          #  )
 
-            guidance_slider = gr.Slider(
-                minimum=1,
-                maximum=14,
-                step=1,
-                value=8,
-                label="Guidance Scale",
-            )
+          #  guidance_slider = gr.Slider(
+          #      minimum=1,
+          #      maximum=14,
+          #      step=1,
+          #      value=8,
+          #      label="Guidance Scale",
+          #  )
 
 
 
@@ -107,9 +111,13 @@ with gr.Blocks() as demo:
       
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(columns=[5], rows=[1], object_fit="contain", height="250px", width="250px")
+        ).style(columns=[1], rows=[1], object_fit="contain", height="512px", width="512px")
 
-    btn.click(gr_generate_images, [text, num_images_slider,num_inference_steps_slider,guidance_slider], gallery)
+    num_images_slider = 1
+    num_inference_steps_slider = 20
+    guidance_slider = 8
+
+    btn.click(gr_generate_images, [text], gallery)
     gr.Examples(examples, inputs=[text])
     gr.HTML(
     """
@@ -118,6 +126,28 @@ with gr.Blocks() as demo:
     )
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--ip",
+        default="0.0.0.0",
+        help="The IP address to of the server"
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=7860,
+        help="The port used"
+    )
+    parser.add_argument(
+        "--gpuid",
+        default="0",
+        help="The gpu id"
+    )
+
+    args = parser.parse_args()
+    pipe = StableDiffusionPipeline.from_single_file(PATH,torch_dtype=torch.float16).to(f"cuda:{args.gpuid}")
     #demo.launch(share=True)
     demo.queue(concurrency_count=2,
-            ).launch(share=True)
+            ).launch(server_name = args.ip, server_port = args.port)
