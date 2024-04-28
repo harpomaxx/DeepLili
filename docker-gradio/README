@@ -2,6 +2,10 @@
 
 First copy files from scripts/deeplili_app/ into the docker-gradio directory
 
+```
+copy_files.sh
+```
+
 Build as usual
 
 ```
@@ -12,7 +16,7 @@ To avoid downloading the model every time you run the docker, change the cache d
 
 ```
 dockerun --gpus all -it -v /home/harpo:/mnt -p 7860:7860 \
---env HUGGINGFACE_HUB_CACHE="/mnt/hf_cache"\ 
+--env HF_HOME="/mnt/.cache/huggingface"\ 
 --name "deeplili" harpomaxx/deeplili
 
 ```

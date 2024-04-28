@@ -22,6 +22,7 @@ RUN pip install gradio==3.45
 COPY app.py /workspace
 COPY oauth_dropbox.py /workspace
 COPY dropbox_tokens.json /workspace
+COPY config.json /workspace
 
 # Set the entrypoint to run the Gradio app 
 ENTRYPOINT ["python", "/workspace/app.py"]
