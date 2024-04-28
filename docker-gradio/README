@@ -1,5 +1,7 @@
 # Docker image for running the gradio app
 
+First copy files from scripts/deeplili_app/ into the docker-gradio directory
+
 Build as usual
 
 ```
