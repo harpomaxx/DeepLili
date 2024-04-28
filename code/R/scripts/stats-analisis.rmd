@@ -1,0 +1,30 @@
+---
+title: "DeepLili Stats"
+output: html_notebook
+---
+
+
+
+```{r}
+# Set the working directory to where the directories are located
+setwd("/home/harpo/Dropbox/deeplili/")
+
+# List directories in the specified path
+directories <- list.dirs(path = ".", full.names = FALSE, recursive = FALSE)
+
+# Convert directory names to Date objects assuming they are in 'YYYY-MM-DD' format
+date_directories <- as.Date(directories, format = "%Y-%m-%d")
+
+# Load ggplot2 library for plotting
+library(ggplot2)
+
+# Create a data frame for plotting
+date_data <- data.frame(dates = date_directories)
+
+# Create and print the histogram
+ggplot(date_data, aes(x = dates)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "blue") +
+  labs(title = "Frequency of Date-Named Directories", x = "Date", y = "Frequency")
+
+```
+
