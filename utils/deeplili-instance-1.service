@@ -1,0 +1,16 @@
+[Unit]
+Description=Deep Lili
+After=network.target
+
+[Service]
+Type=simple
+User=harpo
+Environment="PYTHONPATH=/home/harpo/Dropbox/ongoing-work/git-repos/DeepLili/docker-gradio/"
+#EnvironmentFile=/home/harpo/Dropbox/ongoing-work/git-repos/DeepLili/docker-gradio/environment.sh
+WorkingDirectory=/home/harpo/Dropbox/ongoing-work/git-repos/DeepLili/docker-gradio/
+ExecStart=/bin/bash -c '/home/harpo/miniconda3/bin/conda run -n deeplili_2 python /home/harpo/Dropbox/ongoing-work/git-repos/DeepLili/docker-gradio/app-hf-storage-dropbox.py >>/tmp/error.log 2>&1'
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
