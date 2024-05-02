@@ -1,0 +1,8 @@
+torch
+transformers
+diffusers
+accelerate
+xformers
+gradio==3.45
+dropbox 
+
