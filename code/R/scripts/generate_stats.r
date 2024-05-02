@@ -29,7 +29,7 @@ ggplot(date_data, aes(y = dates)) +
   geom_histogram(binwidth = 1, color = "black", fill = "green", aes(x = after_stat(count) )) +
   geom_text(stat = 'count', aes(label = after_stat(count)), hjust = -0.1) +  # Add count labels
   ggdark::dark_theme_classic()+
-  labs(title = "DeepLili MMAMM 2024", subtitle = paste("Per day activity on",current_time), x = "Date", y = "Frequency")
+  labs(title = "DeepLili MMAMM 2024", subtitle = paste("Per day activity on",current_time), y = "Date", x = "Frequency")
 
 # Save the plot
 ggsave(output_file, width = 14, height = 5, units = 'in')
