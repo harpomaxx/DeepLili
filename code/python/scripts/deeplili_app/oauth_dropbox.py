@@ -3,8 +3,6 @@ import os
 import json
 import logging
 
-#APP_KEY = 'l6yp2z8zyvgi6ol'
-#APP_SECRET = 'yafaatsvvzjd05m'
 TOKEN_STORE_PATH = 'dropbox_tokens.json'
 
 logging.basicConfig(level=logging.INFO, filename='dropbox_upload.log', filemode='a',
